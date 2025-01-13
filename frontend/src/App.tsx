@@ -3,7 +3,7 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import Login from "./pages/Login";
 import MainRoute from "./components/MainRoute";
 import Signup from "./pages/Signup";
-
+import AdminLanding from "./admin/pages/AdminLanding";
 
 function App() {
   useEffect(() => {
@@ -21,17 +21,18 @@ function App() {
     }
   }, []);
   return (
-      <BrowserRouter>
+    <BrowserRouter>
       <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
-          <Routes>
-            <Route path="/" element={<Navigate to="/login" />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<Signup />} />
-            <Route path="/home/*" element={<MainRoute />} />
-            <Route path="*" element={<h1>404</h1>} />
-          </Routes>
-        </div>
-      </BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Navigate to="/login" />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/home/*" element={<MainRoute />} />
+          <Route path="/admin/*" element={<AdminLanding />} />
+          <Route path="*" element={<h1>404</h1>} />
+        </Routes>
+      </div>
+    </BrowserRouter>
   );
 }
 

@@ -30,10 +30,10 @@ public class User {
     @Column(nullable = false, unique = true,name = "email")
     private String email;
 
-    @Column(nullable = false, name = "name")
+    @Column(nullable = true, name = "name")
     private String name;
 
-    @Column(nullable = false, name = "image")
+    @Column(nullable = true, name = "image")
     private byte[] image;
 }
 

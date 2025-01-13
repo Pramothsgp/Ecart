@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { categories } from "../../data/sampleData";
 import apiProducts from "../../api/productService/apiProducts";
+import { toast } from "react-toastify";
+
+
 
 const AddProducts = () => {
   const [productData, setProductData] = useState({
@@ -34,7 +37,17 @@ const AddProducts = () => {
     e.preventDefault();
     try{
       const res = await apiProducts.addProducts(productData);
-      console.log(res);
+      const theme = localStorage.getItem("theme");
+      toast.success(res),{
+          position: "top-right",
+          autoClose: 4000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: theme,
+      };
     } catch (err) {
       console.log(err);
     }

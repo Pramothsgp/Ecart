@@ -1,0 +1,26 @@
+import axios from "axios";
+const API_URL = "http://localhost:8080/";
+
+const addProducts = async(productData :any) =>{
+  const formData = new FormData();
+  formData.append("productName", productData.productName);
+  formData.append("productPrice", productData.productPrice);
+  formData.append("category", productData.category);
+  formData.append("description", productData.description);
+  formData.append("image", productData.image);
+  formData.append("stock", productData.stock);
+  formData.append("ownerId", productData.ownerId);
+    try{
+    const res = await axios.post(
+      `${API_URL}api/products/add-product`,
+      formData);
+        return res.data;
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
+}
+
+export default {
+    addProducts
+}

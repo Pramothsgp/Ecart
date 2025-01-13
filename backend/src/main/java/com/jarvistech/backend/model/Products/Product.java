@@ -1,0 +1,57 @@
+package com.jarvistech.backend.model.Products;
+
+
+
+import java.math.BigDecimal;
+import java.sql.Timestamp;
+
+import com.jarvistech.backend.model.Store;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import lombok.Data;
+
+@Data
+@Entity
+@Table(name = "products")
+public class Product {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false, name = "productName")
+    private String productName;
+
+    @Column(precision = 10 , scale = 2, name = "price")
+    private BigDecimal price;
+
+    @Column(length = 255)
+    private String category;
+
+    @Lob
+    private String description;
+
+    @Lob
+    private String imageName;
+
+    @Lob
+    private byte[] image;
+
+    @Column
+    private Timestamp addedTime;
+
+    @Column
+    private Integer stock;
+
+    @ManyToOne
+    @JoinColumn(name = "owner_id", referencedColumnName = "id", nullable = false)
+    private Store owner;
+}

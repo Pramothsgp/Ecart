@@ -30,6 +30,15 @@ public class AuthService {
         });
     }
 
+    public Optional<User> register(String username, String email, String password) {
+        User user = new User();
+        user.setUsername(username);
+        user.setEmail(email);
+        user.setPassword(passwordEncoder.encode(password));
+        User savedUser = authRepository.save(user);
+        return Optional.of(savedUser);
+    }
+
     public Optional<User> register(String username, String email, String password, MultipartFile image) throws IOException {
         User user = new User();
         user.setUsername(username);

@@ -37,6 +37,15 @@ public class AuthController {
                 .orElse(ResponseEntity.status(401).build());
     }
 
+
+    @PostMapping("/registerUser")
+    public ResponseEntity<?> register(@RequestParam String username, @RequestParam String email,
+            @RequestParam String password) {
+        return authService.register(username, email, password)
+                .map(user -> ResponseEntity.ok(user))
+                .orElse(ResponseEntity.status(401).build());
+    }
+
     @PostMapping("/register")
     public ResponseEntity<String> register(
             @RequestParam("username") String username,

@@ -1,7 +1,8 @@
-package com.jarvistech.backend.model;
+package com.jarvistech.backend.model.Store;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.jarvistech.backend.model.Products.Product;
 
 import jakarta.persistence.CascadeType;
@@ -19,21 +20,22 @@ import lombok.Data;
 @Data
 @Entity
 @Table(name = "owners")
-public class Store {
+public class StoreAndProduct {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "storeName",length = 255)
+    @Column(nullable = false,name = "storeName",length = 255)
     private String storeName;
 
-    @Column(name = "description")
+    @Column(nullable = false, name = "address")
     private String address;
 
-    @Column(name = "user_id")
+    @Column(nullable = false ,name = "user_id")
     private Integer userId;
 
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
     private List<Product> products;
 
 }

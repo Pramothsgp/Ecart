@@ -5,7 +5,8 @@ package com.jarvistech.backend.model.Products;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 
-import com.jarvistech.backend.model.Store;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.jarvistech.backend.model.Store.StoreAndProduct;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -53,5 +54,6 @@ public class Product {
 
     @ManyToOne
     @JoinColumn(name = "owner_id", referencedColumnName = "id", nullable = false)
-    private Store owner;
+    @JsonBackReference
+    private StoreAndProduct owner;
 }

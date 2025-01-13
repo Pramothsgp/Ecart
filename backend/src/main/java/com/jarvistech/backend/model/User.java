@@ -33,7 +33,7 @@ public class User {
     @Column(nullable = true, name = "name")
     private String name;
 
-    @Column(nullable = true, name = "image")
+    @Column(nullable = true, name = "image",columnDefinition = "LONGBLOB")
     private byte[] image;
 }
 

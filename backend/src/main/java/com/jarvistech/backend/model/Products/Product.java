@@ -40,7 +40,7 @@ public class Product {
     @Lob
     private String description;
 
-    @Lob
+    @Column(name = "imageName")
     private String imageName;
 
     @Lob

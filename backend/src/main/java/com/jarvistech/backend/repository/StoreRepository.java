@@ -19,4 +19,8 @@ public interface StoreRepository extends JpaRepository<StoreAndProduct, Integer>
 
     @Query("SELECT s FROM Store s WHERE s.id = ?1")
     Optional<Store> findStoreDetailsById(Integer id);
+
+
+    @Query("SELECT s FROM Store s")
+    Iterable<Store> findAllStores();
 }

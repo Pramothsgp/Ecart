@@ -22,4 +22,8 @@ public class StoreService {
     public Optional<Store> getStoreDetails(Integer id) {
         return storeRepository.findStoreDetailsById(id);
     }
+
+    public Optional<Iterable<Store>> getAllStores() {
+        return Optional.of(storeRepository.findAllStores());
+    }
 }

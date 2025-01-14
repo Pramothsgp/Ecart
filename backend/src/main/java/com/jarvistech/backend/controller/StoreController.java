@@ -34,4 +34,9 @@ public class StoreController {
                 .map(store -> ResponseEntity.ok(store))
                 .orElse(ResponseEntity.notFound().build());
     }
+
+    @GetMapping("/get-all-stores")
+    public ResponseEntity<Iterable<Store>> getAllStores() {
+        return ResponseEntity.ok(storeService.getAllStores().get());
+    }
 }

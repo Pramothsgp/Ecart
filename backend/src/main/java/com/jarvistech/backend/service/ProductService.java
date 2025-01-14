@@ -1,5 +1,6 @@
 package com.jarvistech.backend.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,5 +26,9 @@ public class ProductService {
         product.setOwner(store);
         Product res = productRepository.save(product);
         return Optional.of(res);
+    }
+
+    public Optional<List<Product>> getProducts() {
+        return Optional.of(productRepository.findAll());
     }
 }

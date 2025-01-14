@@ -1,7 +1,7 @@
 import axios from "axios";
 const API_URL = "http://localhost:8080/";
 
-const addProducts = async(productData :any) =>{
+const addProducts = async (productData: any) => {
   const formData = new FormData();
   formData.append("productName", productData.productName);
   formData.append("productPrice", productData.productPrice);
@@ -10,17 +10,28 @@ const addProducts = async(productData :any) =>{
   formData.append("image", productData.image);
   formData.append("stock", productData.stock);
   formData.append("ownerId", productData.ownerId);
-    try{
+  try {
     const res = await axios.post(
       `${API_URL}api/products/add-product`,
-      formData);
-        return res.data;
+      formData
+    );
+    return res.data;
   } catch (err) {
     console.log(err);
     throw err;
   }
-}
+};
 
+const getProducts = async () => {
+  try {
+    const res = await axios.get(`${API_URL}api/products/get-products`);
+    return res.data;
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
+};
 export default {
-    addProducts
-}
+  addProducts,
+  getProducts,
+};

@@ -1,15 +1,23 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Filter from "../components/Filter";
 import ProductCard from "../components/ProductCard";
-import { categories, products } from "../data/sampleData";
+import { categories } from "../data/sampleData";
 import { Menu, Search } from "lucide-react";
+
+import apiProducts from "../api/productService/apiProducts";
 
 const Home = () => {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [priceRange, setPriceRange] = useState([0, 1000]);
   const [sortBy, setSortBy] = useState("featured");
-
+  const [products, setProducts] = useState([]);
+  useEffect(() => {
+    apiProducts
+      .getProducts()
+      .then((res) => setProducts(res))
+      .catch((err) => console.log(err));
+  });
   const filteredProducts = products.filter(
     (product) =>
       selectedCategory === "All" || product.category === selectedCategory
@@ -19,9 +27,12 @@ const Home = () => {
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <div className="flex-1 flex-row max-w-xl mx-auto">
         <div className="absolute left-0">
-          <Menu className="h-10 w-8 text-gray-600 dark:text-gray-300 lg:hidden" onClick={()=>{
-            setIsFilterOpen(true);
-          }}/>
+          <Menu
+            className="h-10 w-8 text-gray-600 dark:text-gray-300 lg:hidden"
+            onClick={() => {
+              setIsFilterOpen(true);
+            }}
+          />
         </div>
         <div className="relative">
           <input

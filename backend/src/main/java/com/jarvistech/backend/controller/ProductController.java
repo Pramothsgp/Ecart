@@ -3,12 +3,13 @@ package com.jarvistech.backend.controller;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,7 +18,6 @@ import org.springframework.web.multipart.MultipartFile;
 import com.jarvistech.backend.model.Products.Product;
 import com.jarvistech.backend.service.ProductService;
 
-import lombok.var;
 
 @CrossOrigin
 @RestController
@@ -58,5 +58,13 @@ public class ProductController {
         } catch (Exception e) {
             return ResponseEntity.status(401).build();
         }
+    }
+
+
+    @GetMapping("/get-products")
+    public ResponseEntity<List<Product>> getProducts() {
+        return productService.getProducts()
+                .map(products -> ResponseEntity.ok(products))
+                .orElse(ResponseEntity.status(401).build());
     }
 }

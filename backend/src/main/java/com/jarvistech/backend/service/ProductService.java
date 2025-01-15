@@ -31,4 +31,8 @@ public class ProductService {
     public Optional<List<Product>> getProducts() {
         return Optional.of(productRepository.findAll());
     }
+
+    public Optional<Product> getProductById(Integer id) {
+        return productRepository.findById(id);
+    }
 }

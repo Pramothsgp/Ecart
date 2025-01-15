@@ -5,6 +5,7 @@ import { categories } from "../data/sampleData";
 import { Menu, Search } from "lucide-react";
 
 import apiProducts from "../api/productService/apiProducts";
+import { Product } from "../types/product";
 
 const Home = () => {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
@@ -17,10 +18,10 @@ const Home = () => {
       .getProducts()
       .then((res) => setProducts(res))
       .catch((err) => console.log(err));
-  });
+  },[]);
   const filteredProducts = products.filter(
-    (product) =>
-      selectedCategory === "All" || product.category === selectedCategory
+    (product : Product) =>
+      selectedCategory === "All" || product.category  === selectedCategory
   );
 
   return (
@@ -72,7 +73,7 @@ const Home = () => {
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredProducts.map((product) => (
+              {filteredProducts.map((product: Product) => (
                 <ProductCard key={product.id} product={product} />
               ))}
             </div>

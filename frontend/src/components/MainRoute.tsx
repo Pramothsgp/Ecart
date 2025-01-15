@@ -2,6 +2,7 @@ import { Route, Routes } from "react-router-dom"
 import HomePage from "../pages/HomePage"
 import OrdersPage from "../pages/OrdersPage"
 import Navigation from "./Navigation"
+import ProductDetails from "./ProductDetails"
 
 const MainRoute = () => {
   return (
@@ -9,6 +10,7 @@ const MainRoute = () => {
       <Navigation/>
         <Routes >
             <Route path="/" element={<HomePage />} />
+        <Route path="/products/:id" element={<ProductDetails />} />
             <Route path="/my-orders" element={<OrdersPage />} />
             <Route path="*" element={<h1>404</h1>} />
         </Routes>

@@ -1,6 +1,6 @@
 import { Star } from "lucide-react";
 
-const ProductCard = ({ product }) => {
+const ProductCard = ({ product } : Product) => {
   const timeDiff = () => {
     const now = new Date();
     const diff = now.getTime() - product.addedTime;

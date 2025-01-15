@@ -31,7 +31,18 @@ const getProducts = async () => {
     throw err;
   }
 };
+
+const getProductById = async (id: string | undefined) => {
+  try {
+    const res = await axios.get(`${API_URL}api/products/get-product/${id}`);
+    return res.data;
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
+};
 export default {
   addProducts,
   getProducts,
+  getProductById,
 };

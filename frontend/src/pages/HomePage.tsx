@@ -1,24 +1,30 @@
-import { useEffect, useState } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 import Filter from "../components/Filter";
-import ProductCard from "../components/ProductCard";
+// import ProductCard from "../components/ProductCard";
 import { categories } from "../data/sampleData";
 import { Menu, Search } from "lucide-react";
 
 import apiProducts from "../api/productService/apiProducts";
 import { Product } from "../types/product";
-
+import ProductcardLoading from "../loading/ProductcardLoading";
+const ProductCard = lazy(() => import("../components/ProductCard"));
 const Home = () => {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [priceRange, setPriceRange] = useState([0, 1000]);
   const [sortBy, setSortBy] = useState("featured");
   const [products, setProducts] = useState([]);
+  const [loading , setLoading] = useState<boolean>(true);
+
   useEffect(() => {
+    setLoading(true);
     apiProducts
       .getProducts()
       .then((res) => setProducts(res))
-      .catch((err) => console.log(err));
-  },[]);
+      .catch((err) => console.log(err))
+      .finally(() => setLoading(false));
+  }, []);
+
   const filteredProducts = products.filter(
     (product : Product) =>
       selectedCategory === "All" || product.category  === selectedCategory
@@ -45,7 +51,7 @@ const Home = () => {
         </div>
       </div>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="flex flex-col lg:flex-row gap-8">
+        <div className="flex flex-col lg:flex-row gap-8 w-full">
           <Filter
             categories={categories}
             selectedCategory={selectedCategory}
@@ -71,17 +77,25 @@ const Home = () => {
                 <option value="rating">Highest Rated</option>
               </select>
             </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredProducts.map((product: Product) => (
-                <ProductCard key={product.id} product={product} />
-              ))}
-            </div>
+            {loading ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {Array.from({ length: 6 }).map((_, index) => (
+                  <ProductcardLoading key={index} />
+                ))}
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {filteredProducts.map((product: Product) => (
+                  <Suspense key={product.id} fallback={<ProductcardLoading />}>
+                  <ProductCard product={product} />
+                  </Suspense>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </div>
     </div>
   );
 };
-
 export default Home;

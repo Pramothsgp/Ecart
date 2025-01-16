@@ -1,6 +1,8 @@
 import { Star } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
-const ProductCard = ({ product } : Product) => {
+const ProductCard = ({ product }: any) => {
+  const navigate = useNavigate();
   const timeDiff = () => {
     const now = new Date();
     const diff = now.getTime() - product.addedTime;
@@ -54,8 +56,11 @@ const ProductCard = ({ product } : Product) => {
           <span className="text-xl font-bold text-gray-900 dark:text-white">
             ₹{product.price}
           </span>
-          <button className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors">
-            Add to Cart
+          <button
+            className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors"
+            onClick={() => navigate(`/home/products/${product.id}`)}
+          >
+            View More
           </button>
         </div>
       </div>

@@ -11,12 +11,15 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.jarvistech.backend.model.Products.Comments;
 import com.jarvistech.backend.model.Products.Product;
+import com.jarvistech.backend.model.Products.ProductComments;
 import com.jarvistech.backend.service.ProductService;
 
 
@@ -70,9 +73,16 @@ public class ProductController {
     }
 
     @GetMapping("/get-product/{id}")
-    public ResponseEntity<Product> getProduct(@PathVariable Integer id) {
+    public ResponseEntity<ProductComments> getProduct(@PathVariable Long id) {
         return productService.getProductById(id)
                 .map(product -> ResponseEntity.ok(product))
+                .orElse(ResponseEntity.status(401).build());
+    }
+
+    @PostMapping("/add-comment")
+    public ResponseEntity<String> addComment(@RequestBody Comments coments) {
+        return productService.addComment(coments)
+                .map(addedComment -> ResponseEntity.ok("Comment Added Successfully"))
                 .orElse(ResponseEntity.status(401).build());
     }
 }

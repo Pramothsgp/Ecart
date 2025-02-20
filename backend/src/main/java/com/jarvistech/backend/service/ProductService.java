@@ -6,8 +6,12 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.jarvistech.backend.model.Products.Comments;
 import com.jarvistech.backend.model.Products.Product;
+import com.jarvistech.backend.model.Products.ProductComments;
 import com.jarvistech.backend.model.Store.StoreAndProduct;
+import com.jarvistech.backend.repository.CommentRepository;
+import com.jarvistech.backend.repository.ProductCommentRepository;
 import com.jarvistech.backend.repository.ProductRepository;
 import com.jarvistech.backend.repository.StoreRepository;
 
@@ -19,6 +23,12 @@ public class ProductService {
 
     @Autowired
     private StoreRepository storeRepository;
+
+    @Autowired
+    private CommentRepository commentRepository;
+
+    @Autowired
+    private ProductCommentRepository productCommentRepository;
 
     public Optional<Product> addProduct(Product product, Integer ownerId) {
         System.out.println(ownerId);
@@ -32,7 +42,11 @@ public class ProductService {
         return Optional.of(productRepository.findAll());
     }
 
-    public Optional<Product> getProductById(Integer id) {
-        return productRepository.findById(id);
+    public Optional<ProductComments> getProductById(Long id) {
+        return productCommentRepository.findById(id);
+    }
+
+    public Optional<Comments> addComment(Comments comment) {
+        return Optional.of(commentRepository.save(comment));
     }
 }

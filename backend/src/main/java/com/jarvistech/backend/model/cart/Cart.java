@@ -2,7 +2,6 @@ package com.jarvistech.backend.model.cart;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.jarvistech.backend.model.User;
 import com.jarvistech.backend.model.Products.Product;
 

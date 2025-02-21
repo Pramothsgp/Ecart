@@ -34,7 +34,7 @@ public class CartController {
     @PutMapping("/update-cart")
     public ResponseEntity<Cart> updatecart(@RequestBody Cart cart){
         if(cart.getQuantity() <= 0){
-            return ResponseEntity.status(204).build()
+            return ResponseEntity.status(204).build();
         }
         return ResponseEntity.ok(cartService.updateCart(cart));
     }

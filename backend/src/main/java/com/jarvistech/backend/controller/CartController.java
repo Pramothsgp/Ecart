@@ -27,7 +27,11 @@ public class CartController {
     // Add to cart
     @PostMapping("/add-to-cart/{userId}")
     public ResponseEntity<Cart> addToCart(@PathVariable Long userId , @RequestParam Long productId , @RequestParam Integer quantity) {
-        return ResponseEntity.ok(cartService.addToCart(userId , productId , quantity));
+        try{
+            return ResponseEntity.ok(cartService.addToCart(userId , productId , quantity));
+        } catch(RuntimeException e) {
+            return ResponseEntity.status(404).build();
+        }
     }
 
     // Update cart quantity

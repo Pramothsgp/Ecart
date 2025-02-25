@@ -27,24 +27,35 @@ public class CartService {
 
     public Cart addToCart(Long userId , Long productId , Integer quantity) {
 
-        User user = userRepository.findById(userId)
-        .orElseThrow(() -> new RuntimeException("User not found"));
+        if(!userRepository.existsById(userId)){
+            throw new RuntimeException("User not found");
+        }
 
-        Product product = productRepository.findById(productId)
-        .orElseThrow(() -> new RuntimeException("Product not found"));
-
-        // Optional<Cart> existingCart = cartRepository.findByUserIdAndProductId(userId, productId);
-        Optional<Cart> existingCart = cartRepository.findByUserAndProduct(user, product);
+        if(!productRepository.existsById(productId)){
+            throw new RuntimeException("Product not found");
+        }
+        
+        Optional<Cart> existingCart = cartRepository.findByUserIdAndProductId(userId, productId);
+        // Optional<Cart> existingCart = cartRepository.findByUserAndProduct(user, product);
         if(existingCart.isPresent()){
             Cart cart = existingCart.get();
             cart.setQuantity(quantity);
-            return cartRepository.save(cart);
+            Cart resCart  = cartRepository.save(cart);
+            resCart.getProduct().setImage(null);
+            return resCart;
         } else {
+            User user = userRepository.findById(userId)
+            .orElseThrow(() -> new RuntimeException("User not found"));
+    
+            Product product = productRepository.findById(productId)
+            .orElseThrow(() -> new RuntimeException("Product not found"));
             Cart cart = new Cart();
             cart.setUser(user);
             cart.setProduct(product);
             cart.setQuantity(quantity);
-            return cartRepository.save(cart);
+            Cart resCart  = cartRepository.save(cart);
+            resCart.getProduct().setImage(null);
+            return resCart;
         }
     }
 

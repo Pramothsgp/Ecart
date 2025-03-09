@@ -1,4 +1,4 @@
-package com.jarvistech.backend.model;
+package com.jarvistech.backend.model.user;
 
 
 import jakarta.persistence.Column;
@@ -30,10 +30,10 @@ public class User {
     @Column(nullable = false, unique = true,name = "email")
     private String email;
 
-    @Column(nullable = true, name = "name")
+    @Column(name = "name")
     private String name;
 
-    @Column(nullable = true, name = "image",columnDefinition = "LONGBLOB")
+    @Column(name = "image",columnDefinition = "LONGBLOB")
     private byte[] image;
 }
 

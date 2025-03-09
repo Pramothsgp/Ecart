@@ -1,6 +1,6 @@
 package com.jarvistech.backend.model.deliveryAgent;
 
-import com.jarvistech.backend.model.User;
+import com.jarvistech.backend.model.user.User;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

@@ -8,8 +8,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.jarvistech.backend.model.User;
 import com.jarvistech.backend.model.deliveryAgent.DeliveryAgent;
+import com.jarvistech.backend.model.user.User;
 import com.jarvistech.backend.repository.AgentRepository;
 import com.jarvistech.backend.repository.AuthRepository;
 

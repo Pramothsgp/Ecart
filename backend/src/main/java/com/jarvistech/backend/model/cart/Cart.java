@@ -2,8 +2,8 @@ package com.jarvistech.backend.model.cart;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.jarvistech.backend.model.User;
 import com.jarvistech.backend.model.Products.Product;
+import com.jarvistech.backend.model.user.User;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

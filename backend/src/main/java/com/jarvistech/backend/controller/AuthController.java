@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.jarvistech.backend.model.User;
 import com.jarvistech.backend.model.deliveryAgent.DeliveryAgent;
+import com.jarvistech.backend.model.user.User;
 import com.jarvistech.backend.service.AuthService;
 
 @CrossOrigin

@@ -6,9 +6,9 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.jarvistech.backend.model.User;
 import com.jarvistech.backend.model.Products.Product;
 import com.jarvistech.backend.model.cart.Cart;
+import com.jarvistech.backend.model.user.User;
 import com.jarvistech.backend.repository.AuthRepository;
 import com.jarvistech.backend.repository.CartRepository;
 import com.jarvistech.backend.repository.ProductRepository;

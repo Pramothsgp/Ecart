@@ -4,7 +4,7 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.jarvistech.backend.model.User;
+import com.jarvistech.backend.model.user.User;
 
 public interface AuthRepository extends JpaRepository<User, Long> {
 

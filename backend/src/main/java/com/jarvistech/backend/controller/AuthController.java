@@ -9,12 +9,14 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.jarvistech.backend.model.User;
+import com.jarvistech.backend.model.deliveryAgent.DeliveryAgent;
+import com.jarvistech.backend.model.user.User;
 import com.jarvistech.backend.service.AuthService;
 
 @CrossOrigin
@@ -76,5 +78,22 @@ public class AuthController {
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid password");
         }
+    }
+
+    @PostMapping("register-delivery-agent")
+    public ResponseEntity<?> registerDeliveryAgent(@RequestBody DeliveryAgent deliveryAgent) {
+        try {
+            return ResponseEntity.ok(authService.registerDeliveryAgent(deliveryAgent));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failed to register delivery agent");
+        }
+
+    }
+    
+    @GetMapping("/get-delivery-agent")
+    public ResponseEntity<?> getDeliveryAgent(@RequestParam Long id) {
+        return authService.getDeliveryAgentByUserId(id)
+            .map(agent -> ResponseEntity.ok(agent))
+            .orElse(ResponseEntity.status(HttpStatus.BAD_REQUEST).build());
     }
 }

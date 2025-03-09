@@ -18,10 +18,11 @@ const ForeGroundTracking = () => {
     setLocation({ latitude, longitude });
 
     try {
-      await axios.post("http://192.168.134.247:8080/api/delivery/update-location", {
-        agentId: 1,
+      await axios.post("http://localhost:8080/api/orders/update-location", {
+        id: 1,
         latitude,
         longitude,
+          timestamp: new Date().getMilliseconds(),
       });
       setStatus(`Location sent: ${latitude}, ${longitude}`);
       console.log("Location sent successfully!");

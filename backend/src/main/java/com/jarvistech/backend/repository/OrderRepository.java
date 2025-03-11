@@ -10,4 +10,6 @@ import com.jarvistech.backend.model.order.Orders;
 @Repository
 public interface OrderRepository extends JpaRepository<Orders, Long> {
     List<Orders> findByUserId(Long userId);
+    List<Orders> findByIdIn(List<Long> ids);
+    List<Orders> findByDeliveryAgentId(Long agentId);
 }

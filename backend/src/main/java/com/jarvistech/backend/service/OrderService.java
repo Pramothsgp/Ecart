@@ -1,6 +1,7 @@
 package com.jarvistech.backend.service;
 
 import com.jarvistech.backend.model.Products.Product;
+import com.jarvistech.backend.model.deliveryAgent.DeliveryAgentLocation;
 import com.jarvistech.backend.model.order.Orders;
 import com.jarvistech.backend.model.user.User;
 import com.jarvistech.backend.model.user.UserWithOrders;
@@ -30,6 +31,8 @@ public class OrderService {
     @Autowired
     private AuthRepository userRepository;
 
+    @Autowired
+    private TrackerService trackerService;
     @Transactional
     public Orders placeOrder(Orders order) throws Exception {
         Product product = productRepository.findById(order.getProduct().getId()).orElseThrow(() -> new Exception("Product not found"));
@@ -77,5 +80,28 @@ public class OrderService {
             ))
             .collect(Collectors.toList());
         return new UserWithOrders(userId, orderDetails);
+    }
+
+    public Optional<Orders> getOrderDetails(Long orderId) {
+        return orderRepository.findById(orderId);
+    }
+
+    @Transactional
+    public List<Orders> updateOrder(List<Long> orderIds, String status) throws Exception {
+        List<Orders> orders = orderRepository.findByIdIn(orderIds);
+        for (Orders order : orders) {
+            order.setStatus(status);
+        }
+        return orderRepository.saveAll(orders);
+    }
+
+    @Transactional
+    public List<Orders> updateOrder(List<Long> orderId, DeliveryAgentLocation location) throws Exception {
+        List<Orders> order = orderRepository.findByIdIn(orderId);
+        for (Orders order1 : order) {
+            order1.setStatus("Out for delivery");
+            order1.setDeliveryAgent(trackerService.setDeliveryAgent(location));
+        }
+        return orderRepository.saveAll(order);
     }
 }

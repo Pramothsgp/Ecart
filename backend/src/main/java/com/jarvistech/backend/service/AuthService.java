@@ -69,9 +69,9 @@ public class AuthService {
 
     public DeliveryAgent registerDeliveryAgent(DeliveryAgent deliveryAgent) throws RuntimeException{
         if(deliveryAgent.getUser().getId() == null){
+            System.out.println("User not found  " + deliveryAgent.getUser());
             User newUser = new User();
-            if (deliveryAgent.getUser().getName() == null || deliveryAgent.getUser().getName().isEmpty()
-                    || deliveryAgent.getUser().getPassword() == null
+            if (deliveryAgent.getUser().getPassword() == null
                     || deliveryAgent.getUser().getPassword().isEmpty()
                     || deliveryAgent.getUser().getEmail() == null
                     || deliveryAgent.getUser().getEmail().isEmpty()
@@ -79,30 +79,15 @@ public class AuthService {
                     || deliveryAgent.getUser().getUsername().isEmpty()) {
                 throw new RuntimeException("Invalid User Details");
             }
-            newUser.setUsername(deliveryAgent.getUser().getName());
+            newUser.setUsername(deliveryAgent.getUser().getUsername());
             newUser.setEmail(deliveryAgent.getUser().getEmail());
-            newUser.setPassword(passwordEncoder.encode("password"));
+            newUser.setPassword(passwordEncoder.encode(deliveryAgent.getUser().getPassword()));
             User user = authRepository.save(newUser);
             deliveryAgent.setUser(user);
             return agentRepository.save(deliveryAgent);
         }
-        User user = authRepository.findUserByUsernameOrEmail(deliveryAgent.getUser().getName(), deliveryAgent.getUser().getEmail())
-        .orElseGet(() -> {
-            User newUser = new User();
-            if (deliveryAgent.getUser().getName() == null || deliveryAgent.getUser().getName().isEmpty()
-                    || deliveryAgent.getUser().getPassword() == null
-                    || deliveryAgent.getUser().getPassword().isEmpty()
-                    || deliveryAgent.getUser().getEmail() == null
-                    || deliveryAgent.getUser().getEmail().isEmpty()
-                    || deliveryAgent.getUser().getUsername() == null
-                    || deliveryAgent.getUser().getUsername().isEmpty()) {
-                throw new RuntimeException("Invalid User Details");
-            }
-            newUser.setUsername(deliveryAgent.getUser().getName());
-            newUser.setEmail(deliveryAgent.getUser().getEmail());
-            newUser.setPassword(passwordEncoder.encode("password"));
-            return authRepository.save(newUser);
-        });
+        User user = authRepository.findById(deliveryAgent.getUser().getId())
+        .orElseThrow(()-> new RuntimeException("User Not Found"));
 
         deliveryAgent.setUser(user);
 
@@ -111,5 +96,14 @@ public class AuthService {
 
     public Optional<DeliveryAgent> getDeliveryAgentByUserId(Long userId) {
         return agentRepository.findById(userId);
+    }
+
+    public Optional<DeliveryAgent> agentLogin(String username, String password) {
+        return agentRepository.findByUserUsername(username)
+                .filter(agent -> passwordEncoder.matches(password, agent.getUser().getPassword()))
+                .map(agent -> {
+                    agent.getUser().setPassword(null);
+                    return agent;
+                });
     }
 }

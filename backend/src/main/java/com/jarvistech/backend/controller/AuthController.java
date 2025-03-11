@@ -85,7 +85,7 @@ public class AuthController {
         try {
             return ResponseEntity.ok(authService.registerDeliveryAgent(deliveryAgent));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failed to register delivery agent");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
 
     }
@@ -95,5 +95,12 @@ public class AuthController {
         return authService.getDeliveryAgentByUserId(id)
             .map(agent -> ResponseEntity.ok(agent))
             .orElse(ResponseEntity.status(HttpStatus.BAD_REQUEST).build());
+    }
+
+    @PostMapping("/agent-login")
+    public ResponseEntity<?> agentLogin(@RequestParam String username, @RequestParam String password) {
+        return authService.agentLogin(username, password)
+                .map(agent -> ResponseEntity.ok(agent))
+                .orElse(ResponseEntity.status(401).build());
     }
 }

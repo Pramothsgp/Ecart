@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { View, Text, Button } from "react-native";
 import * as Location from "expo-location";
 import axios from "axios";
+import { AuthContext } from "../context/AuthContext";
 
 const ForeGroundTracking = () => {
+  const { user } = useContext(AuthContext);
   const [status, setStatus] = useState("Not tracking");
   const [location, setLocation] = useState(null);
   let locationSubscription = null;
@@ -19,7 +21,7 @@ const ForeGroundTracking = () => {
 
     try {
       await axios.post("http://localhost:8080/api/orders/update-location", {
-        id: 1,
+        id: user.id,
         latitude,
         longitude,
           timestamp: new Date().getMilliseconds(),

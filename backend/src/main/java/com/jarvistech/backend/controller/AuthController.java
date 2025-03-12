@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.jarvistech.backend.components.JwtUtil;
+import com.jarvistech.backend.dto.JwtTokenResponse;
 import com.jarvistech.backend.model.deliveryAgent.DeliveryAgent;
 import com.jarvistech.backend.model.user.User;
 import com.jarvistech.backend.service.AuthService;
@@ -27,6 +29,9 @@ public class AuthController {
     @Autowired
     private AuthService authService;
 
+    @Autowired
+    private JwtUtil jwtUtil;
+
     @GetMapping("/test")
     public String testString() {
         return "Hello World";
@@ -34,9 +39,13 @@ public class AuthController {
 
     @GetMapping("/login")
     public ResponseEntity<?> login(@RequestParam String username, @RequestParam String password) {
-        return authService.login(username, password)
-                .map(user -> ResponseEntity.ok(user))
+        try{
+            return authService.login(username, password)
+                .map(user -> ResponseEntity.ok(new JwtTokenResponse(jwtUtil.generateToken(user))))
                 .orElse(ResponseEntity.status(401).build());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
     }
 
 

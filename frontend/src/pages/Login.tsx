@@ -1,11 +1,40 @@
 import { Instagram, Mail, Twitter } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import authentication from "../api/authService/authentication";
+import { useContext, useState } from "react";
+import { toast } from "react-toastify";
+import AuthContext from "../context/AuthContext";
 
 const Login = () => {
-  
+  const [userdata, setUserdata] = useState({
+    username: "",
+    password: "",
+  });
+
+  const navigate = useNavigate();
+
+  const { setToken } = useContext(AuthContext);
+
+  const handleChange = (e: any) => {
+    setUserdata({ ...userdata, [e.target.name]: e.target.value });
+    console.log(userdata);
+    console.log(e.target.name);
+  };
+
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+    try {
+      const res = await authentication.login(userdata);
+      setToken(res.token);
+      toast.success("Login successful");
+      navigate("/home");
+    } catch (err) {
+      alert("Invalid credentials");
+    }
+  };
   return (
     <div className="min-h-screen flex bg-gradient-to-r from-blue-50 to-blue-200 dark:from-blue-900 dark:to-blue-800">
-      {/* Left side: Image */}
+
       <div className="hidden lg:block w-1/2">
         <div
           className="h-full bg-cover bg-center"
@@ -15,7 +44,6 @@ const Login = () => {
         />
       </div>
 
-      {/* Right side: Login Form */}
       <div className="w-full lg:w-1/2 flex items-center justify-center px-4 sm:px-6 lg:px-8">
         <div className="w-full max-w-md">
           <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
@@ -28,7 +56,7 @@ const Login = () => {
               </p>
             </div>
 
-            <form className="space-y-6">
+            <form className="space-y-6" onChange={handleChange} onSubmit={handleSubmit}>
               <div>
                 <label
                   className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
@@ -38,6 +66,7 @@ const Login = () => {
                 </label>
                 <input
                   id="username"
+                  name="username"
                   className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 transition-colors"
                   type="text"
                   placeholder="Enter your username"
@@ -53,6 +82,7 @@ const Login = () => {
                 </label>
                 <input
                   id="password"
+                  name="password"
                   className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 transition-colors"
                   type="password"
                   placeholder="Enter your password"

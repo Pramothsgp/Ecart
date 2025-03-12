@@ -5,6 +5,7 @@ import MainRoute from "./components/MainRoute";
 import Signup from "./pages/Signup";
 import AdminLanding from "./admin/pages/AdminLanding";
 import { ToastContainer } from "react-toastify";
+import { AuthProvider } from "./context/AuthContext";
 
 function App() {
   useEffect(() => {
@@ -24,16 +25,18 @@ function App() {
   return (
     <>
       <BrowserRouter>
-        <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
-          <Routes>
-            <Route path="/" element={<Navigate to="/login" />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<Signup />} />
-            <Route path="/home/*" element={<MainRoute />} />
-            <Route path="/admin/*" element={<AdminLanding />} />
-            <Route path="*" element={<h1>404</h1>} />
-          </Routes>
-        </div>
+        <AuthProvider>
+          <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
+            <Routes>
+              <Route path="/" element={<Navigate to="/login" />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/signup" element={<Signup />} />
+              <Route path="/home/*" element={<MainRoute />} />
+              <Route path="/admin/*" element={<AdminLanding />} />
+              <Route path="*" element={<h1>404</h1>} />
+            </Routes>
+          </div>
+        </AuthProvider>
       </BrowserRouter>
       <ToastContainer />
     </>

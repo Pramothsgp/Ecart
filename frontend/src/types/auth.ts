@@ -13,6 +13,13 @@ export interface DecodedToken extends JwtPayload {
     image?: string;
   };
 
+export interface userRegister {
+  username: string;
+  email: string;
+  password: string;
+  image?: File | null;
+}
+
 export interface AuthContextType {
   user: User | null;
   setToken: (token: string) => void;

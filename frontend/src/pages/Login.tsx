@@ -4,8 +4,11 @@ import authentication from "../api/authService/authentication";
 import { useContext, useState } from "react";
 import { toast } from "react-toastify";
 import AuthContext from "../context/AuthContext";
+import { ColorRing } from "react-loader-spinner";
 
 const Login = () => {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
   const [userdata, setUserdata] = useState({
     username: "",
     password: "",
@@ -17,12 +20,11 @@ const Login = () => {
 
   const handleChange = (e: any) => {
     setUserdata({ ...userdata, [e.target.name]: e.target.value });
-    console.log(userdata);
-    console.log(e.target.name);
   };
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
+    setIsLoading(true);
     try {
       const res = await authentication.login(userdata);
       setToken(res.token);
@@ -30,16 +32,18 @@ const Login = () => {
       navigate("/home");
     } catch (err) {
       alert("Invalid credentials");
+    } finally {
+      setIsLoading(false);
     }
   };
   return (
     <div className="min-h-screen flex bg-gradient-to-r from-blue-50 to-blue-200 dark:from-blue-900 dark:to-blue-800">
-
       <div className="hidden lg:block w-1/2">
         <div
           className="h-full bg-cover bg-center"
           style={{
-            backgroundImage: "url('https://images.unsplash.com/photo-1483985988355-763728e1935b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2340&q=80')",
+            backgroundImage:
+              "url('https://images.unsplash.com/photo-1483985988355-763728e1935b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2340&q=80')",
           }}
         />
       </div>
@@ -56,7 +60,11 @@ const Login = () => {
               </p>
             </div>
 
-            <form className="space-y-6" onChange={handleChange} onSubmit={handleSubmit}>
+            <form
+              className="space-y-6"
+              onChange={handleChange}
+              onSubmit={handleSubmit}
+            >
               <div>
                 <label
                   className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
@@ -96,7 +104,10 @@ const Login = () => {
                     type="checkbox"
                     className="h-4 w-4 text-blue-500 border-gray-300 rounded focus:ring-blue-500"
                   />
-                  <label htmlFor="remember-me" className="ml-2 text-sm text-gray-600 dark:text-gray-400">
+                  <label
+                    htmlFor="remember-me"
+                    className="ml-2 text-sm text-gray-600 dark:text-gray-400"
+                  >
                     Remember me
                   </label>
                 </div>
@@ -107,13 +118,42 @@ const Login = () => {
                   Forgot password?
                 </Link>
               </div>
-
-              <button
-                type="submit"
-                className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center"
-              >
-                Sign in
-              </button>
+              {isLoading ? (
+                <div className="flex justify-center">
+                  <ColorRing
+                    visible={true}
+                    height={"80"}
+                    width="80"
+                    ariaLabel="color-ring-loading"
+                    wrapperStyle={{}}
+                    wrapperClass="color-ring-wrapper"
+                    colors={
+                      localStorage.getItem("theme") === "dark"
+                        ? [
+                            "#616161", // Dark Grey
+                            "#455A64", // Deep Blue-Grey
+                            "#37474F", // Charcoal
+                            "#546E7A", // Steel Blue-Grey
+                            "#263238", // Almost Black
+                          ]
+                        : [
+                            "#E0E0E0", // Light Grey
+                            "#B0BEC5", // Muted Blue-Grey
+                            "#90A4AE", // Soft Teal Grey
+                            "#8D6E63", // Warm Brownish Grey
+                            "#78909C", // Cool Slate Grey
+                          ]
+                    }
+                  />
+                </div>
+              ) : (
+                <button
+                  type="submit"
+                  className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center"
+                >
+                  Sign in
+                </button>
+              )}
 
               <div className="relative my-6">
                 <div className="absolute inset-0 flex items-center">

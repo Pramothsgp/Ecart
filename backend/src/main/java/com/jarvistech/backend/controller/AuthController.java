@@ -20,6 +20,7 @@ import com.jarvistech.backend.dto.JwtTokenResponse;
 import com.jarvistech.backend.model.deliveryAgent.DeliveryAgent;
 import com.jarvistech.backend.model.user.User;
 import com.jarvistech.backend.service.AuthService;
+import com.jarvistech.backend.dto.Message;
 
 @CrossOrigin
 @RestController
@@ -58,17 +59,18 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(
+    public ResponseEntity<?> register(
             @RequestParam("username") String username,
             @RequestParam("email") String email,
             @RequestParam("password") String password,
-            @RequestParam("image") MultipartFile image) {
+            @RequestParam(required = false,value = "image") MultipartFile image) {
         try {
-            System.out.println(username);
             authService.register(username, email, password, image);
-            return ResponseEntity.ok("Registered successfully");
+            return ResponseEntity.ok(new Message("Registered successfully"));
         } catch (IOException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failed to register");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Message("Image not supported"));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Message(e.getMessage()));
         }
     }
 

@@ -11,4 +11,8 @@ import com.jarvistech.backend.model.user.User;
 public interface AuthRepository extends JpaRepository<User, Long> {
 
     Optional<User> findUserByUsernameOrEmail(String username, String email);
+
+    boolean existsByUsername(String username);
+
+    boolean existsByEmail(String email);
 }

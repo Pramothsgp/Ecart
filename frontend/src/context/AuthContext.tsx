@@ -20,7 +20,12 @@ export const AuthProvider = ({ children } : AuthProviderProps) => {
       if (decoded.user) {
         setUser(JSON.parse(decoded.user));
       }
-      navigate("/home");
+      if (
+        window.location.pathname === "/login" ||
+        window.location.pathname === "/signup"
+      ) {
+        navigate("/home");
+      }
     }
   }, []);
 

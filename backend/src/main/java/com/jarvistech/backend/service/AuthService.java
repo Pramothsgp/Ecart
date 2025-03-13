@@ -45,12 +45,19 @@ public class AuthService {
     }
 
     public Optional<User> register(String username, String email, String password, MultipartFile image) throws IOException {
+        if (authRepository.existsByUsername(username))
+            throw new RuntimeException("Username already exists");
+
+        if (authRepository.existsByEmail(email))
+            throw new RuntimeException("Email already exists");
         User user = new User();
         user.setUsername(username);
         user.setEmail(email);
         user.setPassword(passwordEncoder.encode(password));
-        user.setName(image.getOriginalFilename());
-        user.setImage(image.getBytes());
+        if(image != null) {
+            user.setName(image.getOriginalFilename());
+            user.setImage(image.getBytes());
+        }
         User savedUser = authRepository.save(user);
         return Optional.of(savedUser);
     }

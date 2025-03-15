@@ -17,7 +17,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.jarvistech.backend.model.Products.Comments;
+import com.jarvistech.backend.dto.CommentRequestDTO;
+import com.jarvistech.backend.dto.Message;
 import com.jarvistech.backend.model.Products.Product;
 import com.jarvistech.backend.model.Products.ProductComments;
 import com.jarvistech.backend.service.ProductService;
@@ -80,9 +81,13 @@ public class ProductController {
     }
 
     @PostMapping("/add-comment")
-    public ResponseEntity<String> addComment(@RequestBody Comments coments) {
-        return productService.addComment(coments)
-                .map(addedComment -> ResponseEntity.ok("Comment Added Successfully"))
-                .orElse(ResponseEntity.status(401).build());
+    public ResponseEntity<?> addComment(@RequestBody CommentRequestDTO comments) {
+        try {
+            return ResponseEntity.ok(productService.addComment(comments));
+        } catch(IllegalArgumentException e) {
+            return ResponseEntity.status(401).body(new Message(e.getMessage()));
+        }catch (Exception e) {
+            return ResponseEntity.status(401).body(new Message( "Something went wrong"));
+        }
     }
 }

@@ -17,7 +17,6 @@ const ProductDetails = () => {
         .getProductById(id)
         .then((res) => {
           setProduct(res);
-          console.log(res);
           if (res?.image) {
             const blob = new Blob(
               [Uint8Array.from(atob(res.image), (c) => c.charCodeAt(0))],

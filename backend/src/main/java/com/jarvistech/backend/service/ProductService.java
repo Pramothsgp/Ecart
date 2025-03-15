@@ -6,10 +6,13 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.jarvistech.backend.dto.CommentRequestDTO;
 import com.jarvistech.backend.model.Products.Comments;
 import com.jarvistech.backend.model.Products.Product;
 import com.jarvistech.backend.model.Products.ProductComments;
 import com.jarvistech.backend.model.Store.StoreAndProduct;
+import com.jarvistech.backend.model.user.User;
+import com.jarvistech.backend.repository.AuthRepository;
 import com.jarvistech.backend.repository.CommentRepository;
 import com.jarvistech.backend.repository.ProductCommentRepository;
 import com.jarvistech.backend.repository.ProductRepository;
@@ -26,6 +29,9 @@ public class ProductService {
 
     @Autowired
     private CommentRepository commentRepository;
+
+    @Autowired
+    private AuthRepository authRepository;
 
     @Autowired
     private ProductCommentRepository productCommentRepository;
@@ -46,7 +52,17 @@ public class ProductService {
         return productCommentRepository.findById(id);
     }
 
-    public Optional<Comments> addComment(Comments comment) {
-        return Optional.of(commentRepository.save(comment));
+    public Comments addComment(CommentRequestDTO comment) {
+        User user = authRepository.findById(comment.getUserId())
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+        Product product = productRepository.findById(comment.getProductId())
+                .orElseThrow(() -> new IllegalArgumentException("Product not found"));
+        Comments comment1 = new Comments();
+        comment1.setProduct(product);
+        comment1.setUser(user);
+        comment1.setRating(comment.getRating());
+        comment1.setComment(comment.getComment());
+        comment1.setComment(comment.getComment());
+        return commentRepository.save(comment1);
     }
 }

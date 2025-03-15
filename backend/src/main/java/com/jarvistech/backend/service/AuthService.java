@@ -35,6 +35,14 @@ public class AuthService {
         });
     }
 
+    public boolean  checkUsernameEmail(String username, String email) {
+        if(username != null && !username.isEmpty() && authRepository.existsByUsername(username))
+            throw new RuntimeException("Username already exists");
+        if(email != null && !email.isEmpty() && authRepository.existsByEmail(email))
+            throw new RuntimeException("Email already exists");
+        return true;
+    }
+
     public Optional<User> register(String username, String email, String password) {
         User user = new User();
         user.setUsername(username);

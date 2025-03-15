@@ -1,47 +1,78 @@
-import { jwtDecode } from "jwt-decode";
 import { createContext, useState, useEffect } from "react";
-import { AuthContextType, AuthProviderProps, DecodedToken, User } from "../types/auth";
 import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
+import {
+  AuthContextType,
+  AuthProviderProps,
+  DecodedToken,
+  User,
+} from "../types/auth";
 
+// Create AuthContext with default values
 const AuthContext = createContext<AuthContextType>({
   user: null,
   setToken: () => {},
-  logout: () => {}
+  logout: () => {},
 });
 
-export const AuthProvider = ({ children } : AuthProviderProps) => {
-  const [user, setUser] = useState<User | null >(null);
+// Function to decode JWT safely
+const decodeJWT = (token: string) => {
+  try {
+    const base64Url = token.split(".")[1];
+    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+    const res = JSON.parse(atob(base64));
 
+    // Ensure `user` is an object (sometimes it's a string)
+    res.user = typeof res.user === "string" ? JSON.parse(res.user) : res.user;
+    return res;
+  } catch (error) {
+    return null;
+  }
+};
+
+export const AuthProvider = ({ children }: AuthProviderProps) => {
+  const [user, setUser] = useState<User | null>(null);
   const navigate = useNavigate();
+
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token && isTokenValid(token)) {
-      const decoded: DecodedToken = jwtDecode(token) as any;
-      if (decoded.user) {
-        setUser(JSON.parse(decoded.user));
+      const decoded = decodeJWT(token);
+
+      if (decoded?.user) {
+        setUser(decoded.user);
       }
-      if (
-        window.location.pathname === "/login" ||
-        window.location.pathname === "/signup"
-      ) {
+
+      if (["/login", "/signup"].includes(window.location.pathname)) {
         navigate("/home");
       }
+    } else {
+      if (
+        window.location.pathname !== "/login" &&
+        window.location.pathname !== "/signup"
+      )
+        navigate("/login");
     }
-  }, []);
+  }, [navigate]);
 
-  const isTokenValid = (token : string ) => {
-    if (!token) return false;
-    const decoded = jwtDecode(token);
-    return decoded.exp ? decoded.exp * 1000 > Date.now() : false;
+  // Function to check if the token is valid
+  const isTokenValid = (token: string) => {
+    try {
+      const decoded = jwtDecode<DecodedToken>(token);
+      return decoded.exp ? decoded.exp * 1000 > Date.now() : false;
+    } catch (error) {
+      return false;
+    }
   };
 
+  // Function to set a new token and update user state
   const setToken = (token: string) => {
     localStorage.setItem("token", token);
-    const decoded: DecodedToken = jwtDecode(token);
-    setUser(JSON.parse(decoded.user) || null);
+    const decoded = decodeJWT(token);
+    setUser(decoded?.user || null);
   };
 
-
+  // Function to log out the user
   const logout = () => {
     localStorage.removeItem("token");
     setUser(null);

@@ -40,15 +40,25 @@ public class AuthController {
 
     @GetMapping("/login")
     public ResponseEntity<?> login(@RequestParam String username, @RequestParam String password) {
-        try{
+        try {
             return authService.login(username, password)
-                .map(user -> ResponseEntity.ok(new JwtTokenResponse(jwtUtil.generateToken(user))))
-                .orElse(ResponseEntity.status(401).build());
+                    .map(user -> ResponseEntity.ok(new JwtTokenResponse(jwtUtil.generateToken(user))))
+                    .orElse(ResponseEntity.status(401).build());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
     }
 
+    @GetMapping("/check-username-email")
+    public ResponseEntity<?> checkUsernameEmail(@RequestParam String username, @RequestParam String email) {
+        try {
+            return ResponseEntity.ok(new Message(authService.checkUsernameEmail(username, email) ? "Valid" : "Invalid"));
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Message(e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Message(e.getMessage()));
+        }
+    }
 
     @PostMapping("/registerUser")
     public ResponseEntity<?> register(@RequestParam String username, @RequestParam String email,
@@ -63,7 +73,7 @@ public class AuthController {
             @RequestParam("username") String username,
             @RequestParam("email") String email,
             @RequestParam("password") String password,
-            @RequestParam(required = false,value = "image") MultipartFile image) {
+            @RequestParam(required = false, value = "image") MultipartFile image) {
         try {
             authService.register(username, email, password, image);
             return ResponseEntity.ok(new Message("Registered successfully"));
@@ -100,12 +110,12 @@ public class AuthController {
         }
 
     }
-    
+
     @GetMapping("/get-delivery-agent")
     public ResponseEntity<?> getDeliveryAgent(@RequestParam Long id) {
         return authService.getDeliveryAgentByUserId(id)
-            .map(agent -> ResponseEntity.ok(agent))
-            .orElse(ResponseEntity.status(HttpStatus.BAD_REQUEST).build());
+                .map(agent -> ResponseEntity.ok(agent))
+                .orElse(ResponseEntity.status(HttpStatus.BAD_REQUEST).build());
     }
 
     @PostMapping("/agent-login")

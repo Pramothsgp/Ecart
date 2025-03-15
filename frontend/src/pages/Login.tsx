@@ -28,7 +28,11 @@ const Login = () => {
     try {
       const res = await authentication.login(userdata);
       setToken(res.token);
-      toast.success("Login successful");
+      toast.success("Login successful",{
+        autoClose: 2000,
+        position: "top-right",
+        theme: localStorage.getItem("theme") === "dark" ? "dark" : "light",
+      });
       navigate("/home");
     } catch (err) {
       alert("Invalid credentials");

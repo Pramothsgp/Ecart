@@ -1,6 +1,7 @@
 package com.jarvistech.backend.model.Products;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.jarvistech.backend.model.user.User;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -21,8 +22,10 @@ public class Comments {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "user_id", nullable = false)
-    private Long userId;
+    @ManyToOne
+    @JoinColumn(name = "user_id", insertable = false, updatable = false)
+    private User user;
+    
     @Column(name = "product_id", nullable = false)
     private Long productId;
     @Column(name = "rating", nullable = false)

@@ -27,7 +27,7 @@ const Navigation = () => {
               <Link to="/home" className="ml-4 text-xl font-bold text-gray-800 dark:text-white hover:underline">E-Shop</Link>
             </div>
             <div className="flex items-center space-x-4">
-              <Link to="my-orders" className="relative dark:text-white">Orders</Link>
+              <Link to="/home/my-orders" className="relative dark:text-white">Orders</Link>
               {theme === 'light' ?(
                 <MoonStar className="h-6 w-6 text-gray-600 dark:text-gray-300 rounded-lg hover:bg-gray-200" 
                 onClick={toggleTheme} />

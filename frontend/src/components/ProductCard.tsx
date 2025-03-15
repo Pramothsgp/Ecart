@@ -1,8 +1,20 @@
 import { Star } from "lucide-react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
+import bg from "../assets/product-default.webp";
 const ProductCard = ({ product }: any) => {
   const navigate = useNavigate();
+  const [url, setUrl] = useState<string>("");
+  useEffect(() => {
+    if (product?.image) {
+      const blob = new Blob(
+        [Uint8Array.from(atob(product.image), (c) => c.charCodeAt(0))],
+        { type: "image/jpeg" }
+      );
+      const url = URL.createObjectURL(blob);
+      setUrl(url);
+    }
+  }, [product]);
   const timeDiff = () => {
     const now = new Date();
     const diff = now.getTime() - product.addedTime;
@@ -33,7 +45,7 @@ const ProductCard = ({ product }: any) => {
       <div
         className="w-full h-64 bg-center bg-contain bg-cover bg-no-repeat"
         style={{
-          backgroundImage: `url(data:image/jpeg;base64,${product.image})`,
+          backgroundImage: `url(${url || bg})`,
         }}
       ></div>
       <div className="p-4">

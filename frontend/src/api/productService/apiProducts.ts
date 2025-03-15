@@ -1,4 +1,5 @@
 import axios from "axios";
+import { Review } from "../../types/product";
 const API_URL = "http://localhost:8080/";
 
 const addProducts = async (productData: any) => {
@@ -41,8 +42,26 @@ const getProductById = async (id: string | undefined) => {
     throw err;
   }
 };
+
+const addReview = async (review: Review) => {
+  console.log(review);
+  const commentDTO = {
+    userId: review.user.id,
+    productId: review.productId,
+    rating: review.rating,
+    comment: review.comment,
+  }
+  try {
+    const res = await axios.post(`${API_URL}api/products/add-comment`, commentDTO);
+    return res.data;
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
+};
 export default {
   addProducts,
   getProducts,
   getProductById,
+  addReview,
 };

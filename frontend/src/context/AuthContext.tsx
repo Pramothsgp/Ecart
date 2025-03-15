@@ -32,9 +32,25 @@ const decodeJWT = (token: string) => {
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [user, setUser] = useState<User | null>(null);
+  const [isValid , setIsValid] = useState<boolean>(false);
   const navigate = useNavigate();
-
   useEffect(() => {
+    if(!user && !isValid){
+      if (
+        window.location.pathname !== "/login" &&
+        window.location.pathname !== "/signup"
+      )
+        navigate("/login");
+    }
+  }, []);
+  useEffect(() => {
+    if (isValid) {
+      if (
+        window.location.pathname === "/login" ||
+        window.location.pathname === "/signup"
+      )
+        navigate("/home");
+    }
     const token = localStorage.getItem("token");
     if (token && isTokenValid(token)) {
       const decoded = decodeJWT(token);
@@ -42,7 +58,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       if (decoded?.user) {
         setUser(decoded.user);
       }
-
+      setIsValid(true);
       if (["/login", "/signup"].includes(window.location.pathname)) {
         navigate("/home");
       }
@@ -76,6 +92,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const logout = () => {
     localStorage.removeItem("token");
     setUser(null);
+    setIsValid(false);
     navigate("/login");
   };
 

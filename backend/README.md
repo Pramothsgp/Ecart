@@ -17,6 +17,17 @@
   - `401 Unauthorized`: Authentication failed
   - `500 Internal Server Error`: Error message
 
+### `/auth/check-username-email`
+- **Method:** GET
+- **Description:** Checks if the provided username and email are valid.
+- **Parameters:**
+  - `username`: The username to check.
+  - `email`: The email to check.
+- **Response:**
+  - `200 OK`: Returns a `Message` indicating whether the username and email are valid.
+  - `400 Bad Request`: If the username or email already exists.
+  - `500 Internal Server Error`: If an error occurs during the check.
+
 ### `/auth/registerUser`
 - **Method:** POST
 - **Parameters:**

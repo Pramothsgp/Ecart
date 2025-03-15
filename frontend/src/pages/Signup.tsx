@@ -40,8 +40,6 @@ const Signup = () => {
   
   const sendOtp = async (e: React.FormEvent) => {
     e.preventDefault();
-    const otp = Math.floor(100000 + Math.random() * 900000);
-    setOtp(otp.toString());
     if (user.password !== password) {
       toast.error("Passwords do not match", {
         theme: localStorage.getItem("theme") === "dark" ? "dark" : "light",
@@ -51,6 +49,24 @@ const Signup = () => {
       setIsValidPassword(false);
       return;
     }
+    try{
+      setIsLoading(true);
+      const res = await authentication.checkforUserandEmail(user);
+      if(res.message === "Invalid"){
+        toast.error("User already exists", {
+          theme: localStorage.getItem("theme") === "dark" ? "dark" : "light",
+        });
+        return;
+      }
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message || "Something went wrong", {
+        theme: localStorage.getItem("theme") === "dark" ? "dark" : "light",
+      });
+      setIsLoading(false);
+      return;
+    }
+    const otp = Math.floor(100000 + Math.random() * 900000);
+    setOtp(otp.toString());
     try {
       setIsLoading(true);
       const res = await authentication.sendOtp(user.email, otp.toString());
@@ -67,7 +83,6 @@ const Signup = () => {
     }
   };
   const register = async () => {
-    console.log(otp, userOtp);
     if (userOtp !== otp) {
       toast.error("Invalid OTP", {
         theme: localStorage.getItem("theme") === "dark" ? "dark" : "light",

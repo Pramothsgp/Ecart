@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import apiProducts from "../api/productService/apiProducts";
 import { Product } from "../types/product";
 import ProductDetailsLoading from "../loading/ProductDetailsLoading";
+import Comments from "./Comments";
 
 const ProductDetails = () => {
   const { id } = useParams();
@@ -16,6 +17,7 @@ const ProductDetails = () => {
         .getProductById(id)
         .then((res) => {
           setProduct(res);
+          console.log(res);
           if (res?.image) {
             const blob = new Blob(
               [Uint8Array.from(atob(res.image), (c) => c.charCodeAt(0))],
@@ -23,6 +25,7 @@ const ProductDetails = () => {
             );
             const url = URL.createObjectURL(blob);
             setImageBlobURL(url);
+
           } else {
             setImageBlobURL("placeholder.jpg");
           }
@@ -41,8 +44,8 @@ const ProductDetails = () => {
           backgroundImage: `url(${imageBlobURL})`,
         }}
       ></div>
-
-      <div className="w-1/2 h-full bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-lg shadow-lg p-8 overflow-y-auto">
+    <div className="w-1/2 h-full bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-lg shadow-lg p-8 overflow-y-auto">
+      <div className="bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-lg shadow-lg p-8 overflow-y-auto">
         <h2 className="text-4xl font-bold mb-6">{product?.productName}</h2>
         <h3 className="text-xl font-semibold text-gray-700 dark:text-yellow-400 mb-6">
           Price: ₹ {product?.price}
@@ -60,6 +63,10 @@ const ProductDetails = () => {
           </button>
         </div>
       </div>
+            <div className="h-1/2 rounded-lg shadow-lg bg-no-repeat bg-cover bg-center overflow-x-auto custom-scrollbar">
+          {product?.id && <Comments comments={product?.comments} productId={product.id} />}
+    </div>
+    </div>
     </div>
   );
 };

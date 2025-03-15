@@ -1,4 +1,5 @@
 import axios from "axios";
+import { userRegister } from "../../types/auth";
 const API_URL = "http://localhost:8080";
 
 const login = async (userdata: any) => {
@@ -16,7 +17,19 @@ const login = async (userdata: any) => {
   }
 };
 
-
+const checkforUserandEmail = async (userdata: userRegister) => {
+  try {
+    const res = await axios.get(`${API_URL}/auth/check-username-email`, {
+      params: {
+        username: userdata.username,
+        email: userdata.email,
+      },
+    });
+    return res.data;
+  } catch (err) {
+    throw err;
+  }
+};
   const register = async (userdata: any) => {
   try {
     const formData = new FormData();
@@ -47,4 +60,5 @@ export default {
   login,
   register,
   sendOtp,
+  checkforUserandEmail
 };

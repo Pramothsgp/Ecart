@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,9 +15,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.jarvistech.backend.dto.Message;
 import com.jarvistech.backend.model.cart.Cart;
 import com.jarvistech.backend.service.CartService;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/api/cart")
 public class CartController {
@@ -26,11 +29,11 @@ public class CartController {
 
     // Add to cart
     @PostMapping("/add-to-cart/{userId}")
-    public ResponseEntity<Cart> addToCart(@PathVariable Long userId , @RequestParam Long productId , @RequestParam Integer quantity) {
+    public ResponseEntity<?> addToCart(@PathVariable Long userId , @RequestParam Long productId , @RequestParam Integer quantity) {
         try{
             return ResponseEntity.ok(cartService.addToCart(userId , productId , quantity));
         } catch(RuntimeException e) {
-            return ResponseEntity.status(404).build();
+            return ResponseEntity.status(404).body(new Message(e.getMessage()));
         }
     }
 

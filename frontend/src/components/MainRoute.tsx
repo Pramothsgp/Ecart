@@ -5,6 +5,7 @@ import OrdersPage from "../pages/OrdersPage";
 import Navigation from "./Navigation";
 import ProductDetailsLoading from "../loading/ProductDetailsLoading";
 const ProductDetails = lazy(() => import("./ProductDetails"));
+import Cart from "../pages/Cart";
 const MainRoute = () => {
   return (
     <div>
@@ -20,6 +21,7 @@ const MainRoute = () => {
           }
         />
         <Route path="/my-orders" element={<OrdersPage />} />
+        <Route path="/cart" element={<Cart />} />
         <Route path="*" element={<h1>404</h1>} />
       </Routes>
     </div>

@@ -1,15 +1,38 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import apiProducts from "../api/productService/apiProducts";
 import { Product } from "../types/product";
 import ProductDetailsLoading from "../loading/ProductDetailsLoading";
 import Comments from "./Comments";
+import cartapi from "../api/productService/cartapi";
+import AuthContext from "../context/AuthContext";
+import { toast } from "react-toastify";
 
 const ProductDetails = () => {
   const { id } = useParams();
   const [product, setProduct] = useState<Product | null>(null);
   const [imageBlobURL, setImageBlobURL] = useState("placeholder.jpg");
   const [loading, setLoading] = useState<boolean>(true);
+
+  const {user} = useContext(AuthContext);
+  const addToCart = () => {
+    cartapi.addToCart(product?.id , user?.id)
+    .then((res) => {
+      toast.success("Product added to cart",{
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        theme: localStorage.getItem("theme") === "dark" ? "dark" : "light",
+      });
+      console.log(res);
+    })
+    .catch((err) => {
+      console.log(err);
+  });
+};
   useEffect(() => {
     if (id) {
       setLoading(true);
@@ -54,7 +77,8 @@ const ProductDetails = () => {
           Category: {product?.category}
         </p>
         <div className="flex justify-between mt-auto">
-          <button className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors dark:bg-blue-500 dark:hover:bg-blue-600">
+          <button className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors dark:bg-blue-500 dark:hover:bg-blue-600"
+          onClick={addToCart}>
             Add to Cart
           </button>
           <button className="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors dark:bg-green-500 dark:hover:bg-green-600">

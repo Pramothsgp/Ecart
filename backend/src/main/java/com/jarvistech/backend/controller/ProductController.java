@@ -65,6 +65,10 @@ public class ProductController {
         }
     }
 
+    @GetMapping("/get-pages/{page}/{size}")
+    public ResponseEntity<List<Product>> getProducts(@PathVariable Integer page, @PathVariable Integer size) {
+        return ResponseEntity.ok(productService.getPages(page, size));
+    }
 
     @GetMapping("/get-products")
     public ResponseEntity<List<Product>> getProducts() {
@@ -89,5 +93,11 @@ public class ProductController {
         }catch (Exception e) {
             return ResponseEntity.status(401).body(new Message( "Something went wrong"));
         }
+    }
+
+
+    @GetMapping("/search")
+    public ResponseEntity<List<Product>> searchProducts(@RequestParam String key) {
+        return ResponseEntity.ok(productService.searchProducts(key));
     }
 }
